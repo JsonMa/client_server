@@ -1,11 +1,21 @@
-'use strict';
+const { Controller } = require('egg');
 
-const Controller = require('egg').Controller;
-
-class HomeController extends Controller {
+/**
+ * 主页Controller
+ *
+ * @class Home
+ * @extends {Controller}
+ */
+class Home extends Controller {
+  /**
+   * 首页渲染
+   *
+   * @memberof Home
+   * @return {promise} 渲染的首页
+   */
   async index() {
     this.ctx.body = 'hi, egg';
   }
 }
 
-module.exports = HomeController;
+module.exports = Home;
