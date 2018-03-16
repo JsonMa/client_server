@@ -45,7 +45,7 @@ module.exports = (appInfo) => {
   config.mailer = {
     user: 'mahao-0321@hotmail.com',
     pass: 'ainimahao',
-    form: 'mahao-0321@hotmail.com',
+    from: 'mahao-0321@hotmail.com',
   };
 
   return config;
