@@ -10,8 +10,8 @@ module.exports = (appInfo) => {
     dialect: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'dbuser',
-    password: 'client123456',
+    username: 'postgres',
+    password: 'root123456',
     database: 'client',
     benchmark: true,
     define: {
@@ -46,6 +46,14 @@ module.exports = (appInfo) => {
     user: 'mahao-0321@hotmail.com',
     pass: 'ainimahao',
     from: 'mahao-0321@hotmail.com',
+  };
+
+  config.view = {
+    defaultViewEngine: 'nunjucks',
+    defaultExtension: '.nj',
+    mapping: {
+      '.html': 'nunjucks',
+    },
   };
 
   return config;
