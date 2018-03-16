@@ -10,9 +10,9 @@ module.exports = (appInfo) => {
     dialect: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'postgres',
+    username: 'dbuser',
     password: 'root123456',
-    database: 'client',
+    database: 'pofa_client',
     benchmark: true,
     define: {
       freezeTableName: true,
