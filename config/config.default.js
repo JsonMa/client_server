@@ -41,5 +41,12 @@ module.exports = (appInfo) => {
     'auth',
   ];
 
+  // email account
+  config.mailer = {
+    user: 'mahao-0321@hotmail.com',
+    pass: 'ainimahao',
+    form: 'mahao-0321@hotmail.com',
+  };
+
   return config;
 };

@@ -18,4 +18,5 @@ module.exports = (app) => {
   // user
   app.post(`${prefix}/users`, 'user.create');
   app.post(`${prefix}/users/send_email`, 'user.emit');
+  // app.get(`${prefix}/users/confrim`, 'user.confirm');
 };

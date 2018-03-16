@@ -38,6 +38,8 @@ class User extends Controller {
     const { ctx, createRule } = this;
     const { email } = await ctx.validate(createRule);
 
+    // 发送验证邮件
+    await this.ctx.helper.mailer.send(email);
     const md5 = crypto.createHash('md5');
     const ecptPassword = md5.update('email').digest('hex');
     const user = await ctx.app.model.User.create({

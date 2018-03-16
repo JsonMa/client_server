@@ -145,17 +145,6 @@ module.exports = {
     this.assert(user, 403);
   },
 
-  // /**
-  //  * 自定义渲染文件
-  //  *
-  //  * @param {string} file 文件路径
-  //  * @returns {steam} 文件流
-  //  */
-  // render(file) {
-  //   /* istanbul ignore next */
-  //   this.type = 'html';
-  //   return fs.createReadStream(path.join(this.app.baseDir, 'app/view', file));
-  // },
 
   /**
    * 渲染error
