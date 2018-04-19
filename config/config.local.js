@@ -3,8 +3,8 @@ exports.sequelize = {
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: '123456',
-  database: 'pofa_client',
+  password: 'postgresql',
+  database: 'bkc',
   benchmark: true,
   define: {
     freezeTableName: true,
