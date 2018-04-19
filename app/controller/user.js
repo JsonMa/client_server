@@ -37,15 +37,15 @@ class User extends Controller {
   async create() {
     const { ctx, createRule } = this;
     const { email } = await ctx.validate(createRule);
-    const { mailer } = ctx.app.config;
+//     const { mailer } = ctx.app.config;
 
     // 发送验证邮件
-    await this.ctx.helper.mailer.send(mailer, {
-      to: '775087367@qq.com',
-      subject: 'test',
-      text: 'test email',
-      html: '<a>a</a>',
-    });
+//     await this.ctx.helper.mailer.send(mailer, {
+//       to: '775087367@qq.com',
+//       subject: 'test',
+//       text: 'test email',
+//       html: '<a>a</a>',
+//     });
 
     const md5 = crypto.createHash('md5');
     const ecptPassword = md5.update('email').digest('hex');
