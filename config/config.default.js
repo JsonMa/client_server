@@ -47,6 +47,10 @@ module.exports = (appInfo) => {
     pass: 'ainimahao',
     from: 'mahao-0321@hotmail.com',
   };
+  
+  config.siteFile = {
+    '/favicon.ico': '/public/favicon.ico',
+  };
 
   config.view = {
     defaultViewEngine: 'nunjucks',
