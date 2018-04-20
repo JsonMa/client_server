@@ -49,7 +49,7 @@ module.exports = (appInfo) => {
   };
   
   config.siteFile = {
-    '/favicon.ico': '/public/favicon.ico',
+    '/favicon.ico': '/favicon.ico',
   };
 
   config.view = {
