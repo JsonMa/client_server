@@ -39,12 +39,11 @@ class User extends Controller {
     const { email } = await ctx.validate(createRule);
     const { mailer } = ctx.app.config;
     const code = Date.now();
-
     // 发送验证邮件
     const resp = await ctx.helper.mailer.send(mailer, {
       to: email,
       subject: 'bankerchain verification',
-      html: `<p>Weclome to subscribe to bankerchain's official mail, please click <a href="http://bankerchain.tech/users/confrim?validateCode=${code}&email=${email}">here</a> to confirm.</p>`,
+      html: `<p>Weclome to subscribe to bankerchain's official mail, please click <a href="http://bankerchain.tech/api/v1/users/confrim?validateCode=${code}&email=${email}">here</a> to confirm.</p>`,
     });
     await this.app.redis.set(email, code);
     ctx.jsonBody = resp;
@@ -92,7 +91,7 @@ class User extends Controller {
         email,
         password: ecptPassword,
       });
-      ctx.redirect('http://http://bankerchain.tech');
+      ctx.redirect('http://bankerchain.tech');
     } else ctx.jsonBody = { error: '验证码错误' };
   }
 
