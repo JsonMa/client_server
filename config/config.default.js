@@ -1,6 +1,6 @@
 // @ts-nocheck
 module.exports = (appInfo) => {
-  const config = exports = {}; // eslint-disable-line
+  const config = (exports = {}) // eslint-disable-line
 
   // use for cookie sign key, should change to your own and keep security
   config.keys = `${appInfo.name}_1521078208927_2371`;
@@ -36,16 +36,13 @@ module.exports = (appInfo) => {
     },
   };
 
-  config.middleware = [
-    'error',
-    'auth',
-  ];
+  config.middleware = ['error', 'auth'];
 
   // email account
   config.mailer = {
-    user: 'mahao-0321@hotmail.com',
-    pass: 'ainimahao',
-    from: 'mahao-0321@hotmail.com',
+    user: 'support@bankerchain.tech',
+    pass: 'LPnFhTuiLFnUzRgy',
+    from: 'support@bankerchain.tech',
   };
 
   return config;

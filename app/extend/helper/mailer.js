@@ -8,10 +8,10 @@ module.exports = {
     } = email;
     return new Promise((resolve, reject) => {
       const transporter = nodemailer.createTransport({
-        host: 'smtp.office365.com',
-        port: 587,
+        host: 'smtp.exmail.qq.com',
+        port: 465,
         pool: true,
-        secure: false,
+        secure: true,
         auth: {
           user,
           pass,

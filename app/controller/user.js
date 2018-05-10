@@ -38,37 +38,62 @@ class User extends Controller {
     const { ctx, createRule } = this;
     const { email } = await ctx.validate(createRule);
     const { mailer } = ctx.app.config;
+    const code = Date.now();
 
     // 发送验证邮件
-    await this.ctx.helper.mailer.send(mailer, {
-      to: '775087367@qq.com',
-      subject: 'test',
-      text: 'test email',
-      html: '<a>a</a>',
+    const resp = await ctx.helper.mailer.send(mailer, {
+      to: email,
+      subject: 'bankerchain verification',
+      html: `<p>Weclome to subscribe to bankerchain's official mail, please click <a href="http://bankerchain.tech/users/confrim?validateCode=${code}&email=${email}">here</a> to confirm.</p>`,
     });
-
-    const md5 = crypto.createHash('md5');
-    const ecptPassword = md5.update('email').digest('hex');
-    const user = await ctx.app.model.User.create({
-      email,
-      password: ecptPassword,
-    });
-    ctx.jsonBody = user;
+    await this.app.redis.set(email, code);
+    ctx.jsonBody = resp;
   }
 
   /**
-   * 用户详情
+   * 参数验证-邮件确认
+   *
+   * @readonly
+   * @memberof User
+   */
+  get confirmRule() {
+    return {
+      properties: {
+        validateCode: {
+          type: 'string',
+        },
+        email: {
+          type: 'string',
+          format: 'email',
+        },
+      },
+      required: ['validateCode', 'email'],
+      $async: true,
+      additionalProperties: false,
+    };
+  }
+
+  /**
+   * 邮件确认
    *
    * @memberof User
-   * @return {promise} 用户详情
+   * @return {promise} 确认邮件
    */
-  async fetch() {
-    // TODO
-    const { ctx } = this;
+  async confirm() {
+    const { ctx, confirmRule } = this;
 
-    ctx.jsonBody = {
-      data: 'fetch user',
-    };
+    const { validateCode, email } = await ctx.validate(confirmRule);
+    const code = await this.app.redis.get(email);
+
+    if (validateCode === code) {
+      const md5 = crypto.createHash('md5');
+      const ecptPassword = md5.update(email).digest('hex');
+      await ctx.app.model.User.create({
+        email,
+        password: ecptPassword,
+      });
+      ctx.redirect('http://http://bankerchain.tech');
+    } else ctx.jsonBody = { error: '验证码错误' };
   }
 
   /**
@@ -91,8 +116,14 @@ class User extends Controller {
             format: 'email',
           },
         },
+        title: {
+          type: 'string',
+        },
+        content: {
+          type: 'string',
+        },
       },
-      required: [],
+      required: ['title', 'content'],
       $async: true,
       additionalProperties: false,
     };
@@ -106,23 +137,33 @@ class User extends Controller {
    */
   async emit() {
     const { ctx, emitRule } = this;
-    const { ids, emails } = await ctx.validate(emitRule);
-    let users = emails;
+    const {
+      ids, emails, title, content,
+    } = await ctx.validate(emitRule);
+    let users = emails; // 默认为所有用户邮件
+    const { mailer } = ctx.app.config;
 
-    if (ids.length !== 0) users = await ctx.service.findByIds(ids);
+    if (ids && ids.length !== 0) users = await ctx.service.findByIds(ids);
     else {
       users = await ctx.app.model.User.findAll({
         where: {
+          email: {
+            $in: emails,
+          },
           status: 'ON',
           role: '2',
         },
       });
     }
-    users.forEach((user) => {
-      // TODO
+
+    const emailArray = users.map(user => user.email);
+    const resp = await ctx.helper.mailer.send(mailer, {
+      to: emailArray,
+      subject: title,
+      html: `<div>${content}</div>`,
     });
 
-    ctx.jsonBody = users;
+    ctx.jsonBody = resp;
   }
 }
 
