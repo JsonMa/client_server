@@ -84,7 +84,7 @@ class User extends Controller {
     const { validateCode, email } = await ctx.validate(confirmRule);
     const code = await this.app.redis.get(email);
 
-    if (validateCode === code) {
+    if (parseInt(validateCode) === code) {
       const md5 = crypto.createHash('md5');
       const ecptPassword = md5.update(email).digest('hex');
       await ctx.app.model.User.create({
