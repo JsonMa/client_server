@@ -14,7 +14,9 @@ class Home extends Controller {
    * @return {promise} 渲染的首页
    */
   async index() {
-    this.ctx.body = 'hi, egg';
+    const { ctx } = this;
+
+    await ctx.render('index.html');
   }
 }
 

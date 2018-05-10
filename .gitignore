@@ -10,3 +10,7 @@ run/
 .DS_Store
 *.sw*
 *.un~
+public/
+view/
+config/config.local.js
+config/config.unitest.js

@@ -10,9 +10,9 @@ module.exports = (appInfo) => {
     dialect: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'dbuser',
-    password: 'client123456',
-    database: 'client',
+    username: 'postgres',
+    password: 'postgresql',
+    database: 'bkc',
     benchmark: true,
     define: {
       freezeTableName: true,
@@ -43,6 +43,25 @@ module.exports = (appInfo) => {
     user: 'support@bankerchain.tech',
     pass: 'LPnFhTuiLFnUzRgy',
     from: 'support@bankerchain.tech',
+  };
+  
+  config.siteFile = {
+    '/favicon.ico': '/favicon.ico',
+  };
+
+  config.view = {
+    defaultViewEngine: 'nunjucks',
+    defaultExtension: '.nj',
+    mapping: {
+      '.html': 'nunjucks',
+    },
+  };
+
+  config.cluster = {
+    listen: {
+      port: 7003,
+      hostname: '127.0.0.1',
+    },
   };
 
   return config;
