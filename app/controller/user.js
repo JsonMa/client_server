@@ -37,7 +37,6 @@ class User extends Controller {
   async create() {
     const { ctx, createRule } = this;
     const { email } = await ctx.validate(createRule);
-<<<<<<< HEAD
     const { mailer } = ctx.app.config;
     const code = Date.now();
 
@@ -50,17 +49,6 @@ class User extends Controller {
     await this.app.redis.set(email, code);
     ctx.jsonBody = resp;
   }
-=======
-//     const { mailer } = ctx.app.config;
-
-    // 发送验证邮件
-//     await this.ctx.helper.mailer.send(mailer, {
-//       to: '775087367@qq.com',
-//       subject: 'test',
-//       text: 'test email',
-//       html: '<a>a</a>',
-//     });
->>>>>>> c7dbafada3a5b6caa9e31e0ea9a8437bf1df5fbf
 
   /**
    * 参数验证-邮件确认
