@@ -39,14 +39,20 @@ class User extends Controller {
     const { email } = await ctx.validate(createRule);
     const { mailer } = ctx.app.config;
     const code = Date.now();
+
+    // 邮箱验证
+    await ctx.service.user.isExisted(email);
     // 发送验证邮件
     const resp = await ctx.helper.mailer.send(mailer, {
       to: email,
       subject: 'bankerchain verification',
       html: `<p>Weclome to subscribe to bankerchain's official mail, please click <a href="http://bankerchain.tech/api/v1/users/confrim?validateCode=${code}&email=${email}">here</a> to confirm.</p>`,
     });
-    await this.app.redis.set(email, code);
-    ctx.jsonBody = resp;
+    ctx.error(resp.accepted && resp.accepted.includes(email), 'mail send error', 10004);
+    await this.app.redis.set(email, code, 'EX', 60);
+    ctx.jsonBody = {
+      sended: resp.accepted,
+    };
   }
 
   /**
@@ -84,15 +90,16 @@ class User extends Controller {
     const { validateCode, email } = await ctx.validate(confirmRule);
     const code = await this.app.redis.get(email);
 
-    if (parseInt(validateCode) === code) {
+    if (validateCode === code) {
       const md5 = crypto.createHash('md5');
       const ecptPassword = md5.update(email).digest('hex');
       await ctx.app.model.User.create({
         email,
         password: ecptPassword,
       });
+      await this.app.redis.set(email, null);
       ctx.redirect('http://bankerchain.tech');
-    } else ctx.jsonBody = { error: '验证码错误' };
+    } else ctx.jsonBody = { error: 'Validation code error or expired, please subscribe again' };
   }
 
   /**
@@ -139,11 +146,16 @@ class User extends Controller {
     const {
       ids, emails, title, content,
     } = await ctx.validate(emitRule);
-    let users = emails; // 默认为所有用户邮件
+    let users = await ctx.app.model.User.findAll({
+      where: {
+        status: 'ON',
+        role: '2',
+      },
+    }); // 默认为所有用户邮件
     const { mailer } = ctx.app.config;
 
     if (ids && ids.length !== 0) users = await ctx.service.findByIds(ids);
-    else {
+    else if (emails && emails.length !== 0) {
       users = await ctx.app.model.User.findAll({
         where: {
           email: {

@@ -44,7 +44,7 @@ module.exports = (appInfo) => {
     pass: 'LPnFhTuiLFnUzRgy',
     from: 'support@bankerchain.tech',
   };
-  
+
   config.siteFile = {
     '/favicon.ico': '/public/favicon.ico',
   };
